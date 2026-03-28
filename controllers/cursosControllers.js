@@ -6,9 +6,9 @@ class CursoController {
 
     conslutar(req,res){
           try {
-            db.query(`SELECT * FROM curso`,(error,rows)=>{
+            db.query(`SELECT * FROM cursos`,(error,rows)=>{
                 if(error){
-                    res.status(400).send(error.message);
+                    return res.status(400).send(error.message);
                 }
                 res.status(200).send(rows);
             })
@@ -20,12 +20,12 @@ class CursoController {
     conslutarDetalles(req,res){
            const {id} = req.params;
            try {
-             db.query(`SELECT * FROM curso
+             db.query(`SELECT * FROM cursos
                         WHERE id = ?`,id,(error,rows)=>{
                             if(error){
-                                res.status(400).send(error.message);
+                               return res.status(400).send(error.message);
                             }
-                            res.send(rows[0]);
+                            res.status(200).send(rows[0]);
 
                         })
            } catch (error) {
@@ -36,11 +36,11 @@ class CursoController {
     ingresar(req,res){
         const {nombre,descripcion,profesor_id} = req.body;
         try {
-            db.query(`INSERT INTO curso(id,nombre,descripcion,profesor_id)
+            db.query(`INSERT INTO cursos(id,nombre,descripcion,profesor_id)
                       VALUES(NULL,?,?,?);`,[nombre,descripcion,profesor_id],
                       (error,rows)=>{
                         if(error){
-                            res.status(400).send(error.message);
+                            return res.status(400).send(error.message);
                         }
                             res.status(201).json(rows);
                       });
@@ -55,12 +55,12 @@ class CursoController {
          try {
              const {id} = req.params;
               const {nombre,descripcion,profesor_id} = req.body;
-            db.query(`UPDATE curso
+            db.query(`UPDATE cursos
                       SET nombre=?, descripcion=?, profesor_id=?
                       WHERE id=?`,[nombre,descripcion,profesor_id,id],
                     (error,rows)=>{
                         if(error){
-                            res.status(400).send(error.message);
+                            return res.status(400).send(error.message);
                         }
                         if(rows.affectedRows === 1){
                             res.status(200).json({
@@ -80,11 +80,11 @@ class CursoController {
     borrar(req,res){
          try {
              const {id} = req.params;
-            db.query(`DELETE FROM   curso
+            db.query(`DELETE FROM   cursos
                       WHERE id=?`,id,
                     (error,rows)=>{
                         if(error){
-                            res.status(400).send(error.message);
+                           return res.status(400).send(error.message);
                         }
                         if(rows.affectedRows === 1){
                             res.status(200).json({
@@ -108,7 +108,7 @@ class CursoController {
                       VALUES(?,?);`,[id_estudiante,id_curso],
                       (error,rows)=>{
                         if(error){
-                            res.status(400).send(error.message);
+                            return res.status(400).send(error.message);
                         }
                             res.status(201).json({res : 'estudiante matriculado al curso'});
                       });

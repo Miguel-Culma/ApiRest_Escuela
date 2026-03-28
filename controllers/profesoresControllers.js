@@ -9,7 +9,7 @@ class ProfesoresController {
         try {
             db.query(`SELECT * FROM profesores`,(error,rows)=>{
                 if(error){
-                    res.status(400).send(error.message);
+                    return res.status(400).send(error.message);
                 }
                 res.status(200).send(rows);
             })
@@ -27,7 +27,7 @@ class ProfesoresController {
                             if(error){
                                 res.status(400).send(error.message);
                             }
-                            res.send(rows[0]);
+                            res.status(200).send(rows[0]);
 
                         })
            } catch (error) {
@@ -43,7 +43,7 @@ class ProfesoresController {
                       VALUES(NULL,?,?,?,?,?,?);`,[dni,nombre,apellido,email,profesion,telefono],
                       (error,rows)=>{
                         if(error){
-                            res.status(400).send(error.message);
+                            return res.status(400).send(error.message);
                         }
                             res.status(201).json(rows);
                       });
@@ -64,7 +64,7 @@ class ProfesoresController {
                       WHERE id=?`,[dni,nombre,apellido,email,profesion,telefono,id],
                     (error,rows)=>{
                         if(error){
-                            res.status(400).send(error.message);
+                            return res.status(400).send(error.message);
                         }
                         if(rows.affectedRows === 1){
                             res.status(200).json({
@@ -72,7 +72,7 @@ class ProfesoresController {
                                 respuesta : "Actualizacion exitosa"
                             });
                         }else{
-                            res.send("Id no encontrado")
+                            res.status(500).send("Id no encontrado")
                         }
                     })
         } catch (error) {
@@ -86,7 +86,7 @@ class ProfesoresController {
             db.query(`DELETE FROM profesores
                       WHERE id = ?`,id,(error,rows)=>{
                         if(error){
-                            res.status(400).send(error.message);
+                            return res.status(400).send(error.message);
                         }
                         if(rows.affectedRows === 1){
                             res.status(200).json({
@@ -94,7 +94,7 @@ class ProfesoresController {
                                 respuesta:"Eliminacion exitosa"
                             });
                         }else{
-                            res.send("Id no encontrado")
+                            res.status(500).send("Id no encontrado")
                         }
                       })
 
