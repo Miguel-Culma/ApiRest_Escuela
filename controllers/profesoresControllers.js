@@ -1,11 +1,10 @@
-const e = require('cors');
 const profesor = require('../models/profesoresModel');
 class ProfesoresController {
     constructor(){
 
     }
 
-    async conslutar(req,res){
+    async consultar(req,res){
       try {
         const prof = await profesor.findAll();
         res.status(200).json(prof);
@@ -14,7 +13,7 @@ class ProfesoresController {
       }
     }
 
-    async conslutarDetalles(req,res){
+    async consultarDetalles(req,res){
        try {
         const {id} = req.params;
         const prof = await profesor.findByPk(id);
@@ -52,14 +51,14 @@ class ProfesoresController {
         }
     }
 
-    borrar(req,res){
+    async borrar(req,res){
        try {
           const {id} = req.params;
-          const prof = profesor.destroy({where:{id}});
+          const prof = await profesor.destroy({where:{id}});
           if(prof === 0){
             return res.status(404).json({respuesta:`El profesor con el id ${id} no existe`});
           }
-          res.status(200).json({respuesta : `El profesor con el id ${id} fue elminado`});
+          res.status(200).json({respuesta : `El profesor con el id ${id} fue eliminado`});
        } catch (error) {
           res.status(500).json({Error:error});
        }

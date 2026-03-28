@@ -6,7 +6,7 @@ class CursoController {
 
     }
 
-    async conslutar(req,res){
+    async consultar(req,res){
       try {
           const crs = await  curso.findAll({
                              include: [ {model : profesor}, // relacion 1:M
@@ -22,7 +22,7 @@ class CursoController {
           }
     }
 
-    async conslutarDetalles(req,res){
+    async consultarDetalles(req,res){
       try {
             const {id} = req.params;
             const crs = await curso.findByPk(id, 
@@ -45,13 +45,13 @@ class CursoController {
 
     async ingresar(req,res){
       try {
-           const {dni,nombre,descripcion,profesor_id} = req.body;
+           const {nombre,descripcion,profesor_id} = req.body;
            const profe = await profesor.findByPk(profesor_id);
            if(!profe){
              return res.status(400).json({Respuesta : `El profesor con el id ${profesor_id} no existe`})
            }
 
-           const crs = await curso.create({dni,nombre,descripcion,profesor_id});
+           const crs = await curso.create({nombre,descripcion,profesor_id});
            res.status(201).json(crs);
 
           } catch (error) {
@@ -81,7 +81,7 @@ class CursoController {
             if(crs === 0){
                 res.status(400).json({Error : `El curso con el id ${id} no existe`});
             }
-             res.status(200).json({respuesta : `El curso con el id ${id} fue elminado`})
+             res.status(200).json({respuesta : `El curso con el id ${id} fue eliminado`})
 
           } catch (error) {
           res.status(500).json({Error:error.message}); 
@@ -95,20 +95,19 @@ class CursoController {
         const crs = await curso.findByPk(id_curso);
         const estu = await estudiante.findByPk(id_estudiante);
 
-        const yaExiste = await crs.hasEstudiante(Number(id_estudiante));
-        
-        if (yaExiste) {
-            return res.status(400).json({
-                mensaje: `El estudiante con el id ${id_curso} ya está en el curso`
-            });
-        }
         if (!crs){ 
             return res.status(404).json({ mensaje: 'Curso no existe' });
         }
         if(!estu){
-            return res.status(404).json({ mensaje: 'Estudante no existe' });
+            return res.status(404).json({ mensaje: 'Estudiante no existe' });
         }
+        const yaExiste = await crs.hasEstudiante(Number(id_estudiante));
 
+        if (yaExiste) {
+            return res.status(400).json({
+                mensaje: `El estudiante con el id ${id_estudiante} ya está en el curso`
+            });
+        }
         await crs.addEstudiante(id_estudiante);
 
         res.status(200).json({ mensaje: 'Estudiante agregado al curso' });
