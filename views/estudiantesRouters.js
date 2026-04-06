@@ -1,10 +1,10 @@
 const express = require('express');
 const routersEstudiantes = express.Router();
 const estudiantesController = require('../controllers/estudiantesControllers');
-
+const idempotencyMiddleware = require('../middlewares/idempotency');
 routersEstudiantes.get('/', estudiantesController.conslutar);
 
-routersEstudiantes.post('/',estudiantesController.ingresar);
+routersEstudiantes.post('/',idempotencyMiddleware,estudiantesController.ingresar);
 
 // reciben parametros
 // paremtro id
