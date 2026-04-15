@@ -1,10 +1,10 @@
 const express = require('express');
 const routersProfesor = express.Router();
 const profesoresController = require('../controllers/profesoresControllers');
-
+const idempotencyMiddleware = require('../middlewares/idempotency');
 routersProfesor.get('/',profesoresController.consultar);
 
-routersProfesor.post('/',profesoresController.ingresar);
+routersProfesor.post('/',idempotencyMiddleware,profesoresController.ingresar);
 
 routersProfesor.route('/:id')
         .get(profesoresController.consultarDetalles)

@@ -1,12 +1,13 @@
 const express = require('express');
 const routerscurso = express.Router();
 const cursoesController = require('../controllers/cursosControllers');
+const idempotencyMiddleware = require('../middlewares/idempotency');
 
 routerscurso.get('/',cursoesController.consultar);
 
-routerscurso.post('/',cursoesController.ingresar);
+routerscurso.post('/',idempotencyMiddleware,cursoesController.ingresar);
 
-routerscurso.post('/registraEstudiante',cursoesController.asociarEst)
+routerscurso.post('/registraEstudiante',idempotencyMiddleware,cursoesController.asociarEst)
 routerscurso.route('/:id')
         .get(cursoesController.consultarDetalles)
         .put(cursoesController.actualizar)
